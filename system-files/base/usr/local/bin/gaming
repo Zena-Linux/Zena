@@ -8,23 +8,22 @@ CONTAINER_NAME = "Gaming"
 IMAGE = "docker.io/cachyos/cachyos-v3:latest"
 
 
-def run(cmd, **kwargs):
-    """Run a command, print output, raise on error."""
-    print(f"Running: {cmd}")
-    result = subprocess.run(cmd, shell=True, **kwargs)
-    if result.returncode != 0 and not kwargs.get("check") is False:
-        raise subprocess.CalledProcessError(result.returncode, cmd)
-    return result
+def run(cmd, *, env=None, check=True):
+    """Run a command with list arguments, print it, raise on error."""
+    print("Running:", " ".join(cmd))
+    subprocess.run(cmd, env=env, check=check)
 
 
 def container_exists(name):
     """Return True if a Podman container with this name exists."""
     try:
-        out = subprocess.check_output(
-            "podman ps -a --format '{{.Names}}'",
-            shell=True, text=True
+        result = subprocess.run(
+            ["podman", "ps", "-a", "--format", "{{.Names}}"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
-        return name in out.splitlines()
+        return name in result.stdout.splitlines()
     except subprocess.CalledProcessError:
         return False
 
@@ -32,8 +31,11 @@ def container_exists(name):
 def has_nvidia_gpu():
     """Return True if `nvidia-smi` runs successfully."""
     try:
-        subprocess.check_output(
-            "nvidia-smi", shell=True, stderr=subprocess.DEVNULL
+        subprocess.run(
+            ["nvidia-smi"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
         )
         print("NVIDIA GPU detected - enabling GPU support")
         return True
@@ -47,25 +49,37 @@ def install():
               CONTAINER_NAME}' already exists - skipping install.")
         return
 
-    nvidia_flag = "--nvidia" if has_nvidia_gpu() else ""
+    nvidia_flag = ["--nvidia"] if has_nvidia_gpu() else []
+
     print(f"Creating distrobox container {CONTAINER_NAME} from {IMAGE}")
-    run(f'distrobox create --name "{CONTAINER_NAME}" --image "{
-        IMAGE}" {nvidia_flag} --yes')
+    run([
+        "distrobox", "create",
+        "--name", CONTAINER_NAME,
+        "--image", IMAGE,
+        *nvidia_flag,
+        "--yes",
+    ])
 
     print("Installing gaming packages...")
-    run(f'distrobox enter "{
-        CONTAINER_NAME}" -- sudo pacman -Syu --noconfirm', check=True)
+    run([
+        "distrobox", "enter", CONTAINER_NAME,
+        "--", "sudo", "pacman",
+        "-Syu", "--noconfirm",
+    ])
+
     pkgs = [
         "cachyos-gaming-meta",
         "cachyos-gaming-applications",
         "umu-launcher",
         "protonup-qt",
     ]
-    run(
-        f'distrobox enter "{
-            CONTAINER_NAME}" -- sudo pacman -S --noconfirm ' + " ".join(pkgs),
-        check=True
-    )
+
+    run([
+        "distrobox", "enter", CONTAINER_NAME,
+        "--", "sudo", "pacman",
+        "-S", "--noconfirm",
+        *pkgs,
+    ])
 
     print("Exporting apps to host...")
     desktop_files = [
@@ -77,11 +91,11 @@ def install():
     ]
 
     for file in desktop_files:
-        run(
-            f'distrobox enter "{
-                CONTAINER_NAME}" -- distrobox-export --app "{file}"',
-            check=True
-        )
+        run([
+            "distrobox", "enter", CONTAINER_NAME,
+            "--", "distrobox-export",
+            "--app", file,
+        ])
 
     print("Exporting binary launchers to host...")
     bin_paths = [
@@ -91,11 +105,11 @@ def install():
     ]
 
     for path in bin_paths:
-        run(
-            f'distrobox enter "{
-                CONTAINER_NAME}" -- distrobox-export --bin "{path}"',
-            check=True
-        )
+        run([
+            "distrobox", "enter", CONTAINER_NAME,
+            "--", "distrobox-export",
+            "--bin", path,
+        ])
 
 
 def upgrade():
@@ -103,9 +117,8 @@ def upgrade():
         print(f"Container '{CONTAINER_NAME}' does not exist - cannot upgrade.")
         return
 
-    print(f"Upgrading container '{CONTAINER_NAME}' using distrobox upgrade...")
-    run(f'distrobox upgrade "{CONTAINER_NAME}"', check=True)
-
+    print(f"Upgrading container '{CONTAINER_NAME}'...")
+    run(["distrobox", "upgrade", CONTAINER_NAME])
     print("Upgrade complete!")
 
 
@@ -122,8 +135,9 @@ def uninstall():
     if not container_exists(CONTAINER_NAME):
         print(f"Container '{CONTAINER_NAME}' does not exist.")
         return
+
     print(f"Removing distrobox container {CONTAINER_NAME}...")
-    run(f'distrobox rm -f "{CONTAINER_NAME}"')
+    run(["distrobox", "rm", "-f", CONTAINER_NAME])
     print("Done.")
 
 
