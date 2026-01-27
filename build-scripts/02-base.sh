@@ -46,6 +46,7 @@ packages=(
   xdg-user-dirs
   xdg-terminal-exec
   xdg-user-dirs-gtk
+  zenity
 
   ############################
   # DESKTOP PORTALS          #
@@ -143,6 +144,9 @@ packages=(
   nix
   nix-daemon
 
+  ############################
+  # Dazzle                   #
+  ############################
   plymouth
   plymouth-system-theme
 )
