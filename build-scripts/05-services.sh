@@ -19,8 +19,8 @@ system_services=(
   podman-tcp.service
   zena-setup.service
   systemd-homed.service
+  flatpak-theming.service
   systemd-resolved.service
-  flatpak-gtk-config.service
   bootc-fetch-apply-updates.service
 )
 

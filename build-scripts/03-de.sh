@@ -20,6 +20,7 @@ packages=(
   quickshell
 
   adw-gtk3-theme
+  qt6ct
   xwayland-satellite
 
   cava
