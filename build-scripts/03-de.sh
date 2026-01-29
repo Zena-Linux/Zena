@@ -44,4 +44,8 @@ packages=(
 
 dconf update
 
+sed -i \
+  's|^Exec=niri-session|Exec=/bin/sh -c '\''niri-session > /dev/null 2>&1'\''|' \
+  /usr/share/wayland-sessions/niri.desktop
+
 echo "::endgroup::"
