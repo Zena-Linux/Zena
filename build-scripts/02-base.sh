@@ -35,6 +35,8 @@ packages=(
   audispd-plugins
   cifs-utils
   firewalld
+  fprintd
+  fprintd-pam
   fuse
   fuse-devel
   man-pages
