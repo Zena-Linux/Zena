@@ -1,0 +1,34 @@
+#!/bin/sh
+
+case "$-" in
+  *i*) IS_INTERACTIVE=1 ;;
+  *)   IS_INTERACTIVE=0 ;;
+esac
+
+DEFAULT_SHELL="/bin/bash"
+CONFIG="$HOME/.config/shell"
+PREFERRED_SHELL=""
+
+if [ "$IS_INTERACTIVE" -eq 1 ] && [ -r "$CONFIG" ]; then
+  PREFERRED_SHELL="$(head -n 1 "$CONFIG" | tr -d '\r')"
+fi
+
+if [ -z "$PREFERRED_SHELL" ] || [ ! -x "$PREFERRED_SHELL" ]; then
+  PREFERRED_SHELL="$DEFAULT_SHELL"
+fi
+
+if [ "$IS_INTERACTIVE" -ne 1 ]; then
+  exec "$DEFAULT_SHELL" "$@"
+fi
+
+case "$(basename "$PREFERRED_SHELL")" in
+  bash) LOGIN_OP="--login" ;;
+  zsh|ksh|mksh|dash|sh|ash|busybox) LOGIN_OP="-l" ;;
+  *)    LOGIN_OP="" ;;
+esac
+
+if [ -n "$LOGIN_OP" ]; then
+  exec "$PREFERRED_SHELL" "$LOGIN_OP"
+else
+  exec bash --login -c "exec \"$PREFERRED_SHELL\""
+fi

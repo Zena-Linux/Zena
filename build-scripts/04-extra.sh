@@ -7,6 +7,9 @@ set -ouex pipefail
 shopt -s nullglob
 
 packages=(
+  fish
+  zsh
+
   fastfetch
 
   bazaar
