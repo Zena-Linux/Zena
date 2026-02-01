@@ -28,4 +28,4 @@ case "$(basename "$PREFERRED_SHELL")" in
   *)    LOGIN_OP="" ;;
 esac
 
-exec bash --login -c "exec \"$PREFERRED_SHELL $LOGIN_OP\""
+exec bash --login -c "exec \"$PREFERRED_SHELL\" \"$LOGIN_OP\""
