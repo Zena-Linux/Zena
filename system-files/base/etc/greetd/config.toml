@@ -1,5 +1,5 @@
 [terminal]
-vt = 2
+vt = 1
 
 [default_session]
 command = "/bin/sh -c 'RUST_LOG=error dms-greeter --command niri -C /etc/greetd/niri.kdl > /dev/null 2>&1'"
