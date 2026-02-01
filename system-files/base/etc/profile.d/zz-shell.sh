@@ -1,6 +1,5 @@
 #!/bin/sh
 
-DEFAULT_SHELL="/bin/bash"
 CONFIG="$HOME/.config/shell"
 PREFERRED_SHELL=""
 
@@ -9,7 +8,7 @@ if [ -r "$CONFIG" ]; then
 fi
 
 if [ -z "$PREFERRED_SHELL" ] || [ ! -x "$PREFERRED_SHELL" ]; then
-  exec "$DEFAULT_SHELL" "$@"
+  return 0
 fi
 
 case "$(basename "$PREFERRED_SHELL")" in
@@ -19,7 +18,7 @@ case "$(basename "$PREFERRED_SHELL")" in
 esac
 
 if [ -n "$LOGIN_OP" ]; then
-  exec bash --login -c "exec \"$PREFERRED_SHELL\" \"$LOGIN_OP\""
+    exec "$PREFERRED_SHELL" "$LOGIN_OP"
 else
-  exec bash --login -c "exec \"$PREFERRED_SHELL\""
+    exec "$PREFERRED_SHELL"
 fi

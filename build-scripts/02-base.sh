@@ -199,8 +199,6 @@ tar --create --verbose --preserve-permissions \
 
 rm -rf /nix/* /nix/.[!.]*
 
-echo "/usr/local/bin/zesh" | tee -a /etc/shells
-
 install -Dpm0644 -t /usr/share/plymouth/themes/spinner/ /ctx/assets/logos/watermark.png
 
 # So it won't reboot on Update
