@@ -1,9 +1,10 @@
 #!/bin/sh
 
-case "$-" in
-  *i*) IS_INTERACTIVE=1 ;;
-  *)   IS_INTERACTIVE=0 ;;
-esac
+if [ -t 0 ]; then
+  IS_INTERACTIVE=1
+else
+  IS_INTERACTIVE=0
+fi
 
 DEFAULT_SHELL="/bin/bash"
 CONFIG="$HOME/.config/shell"
@@ -23,12 +24,8 @@ fi
 
 case "$(basename "$PREFERRED_SHELL")" in
   bash) LOGIN_OP="--login" ;;
-  zsh|ksh|mksh|dash|sh|ash|busybox) LOGIN_OP="-l" ;;
+  zsh|ksh|mksh|dash|sh|ash|busybox|fish) LOGIN_OP="-l" ;;
   *)    LOGIN_OP="" ;;
 esac
 
-if [ -n "$LOGIN_OP" ]; then
-  exec "$PREFERRED_SHELL" "$LOGIN_OP"
-else
-  exec bash --login -c "exec \"$PREFERRED_SHELL\""
-fi
+exec bash --login -c "exec \"$PREFERRED_SHELL $LOGIN_OP\""
