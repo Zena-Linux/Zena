@@ -199,7 +199,7 @@ tar --create --verbose --preserve-permissions \
 
 rm -rf /nix/* /nix/.[!.]*
 
-echo "/usr/local/bin/sheller" | tee -a /etc/shells
+echo "/usr/local/bin/zheller" | tee -a /etc/shells
 
 install -Dpm0644 -t /usr/share/plymouth/themes/spinner/ /ctx/assets/logos/watermark.png
 
