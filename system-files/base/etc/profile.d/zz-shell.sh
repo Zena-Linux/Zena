@@ -5,8 +5,7 @@ PREFERRED_SHELL=""
 
 case "$-" in *i*) ;; *) return 0 ;; esac
 
-[ -n "$USER_SHELL_OVERRIDE" ] && return 0
-export USER_SHELL_OVERRIDE=1
+[ -n "$SKIP_PREFERRED_SHELL" ] && return 0
 
 if [ -r "$CONFIG" ]; then
   PREFERRED_SHELL="$(head -n 1 "$CONFIG" | tr -d '\r')"
