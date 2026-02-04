@@ -18,8 +18,7 @@ coprs=(
   avengemedia/dms
 
   che/nerd-fonts
-  scrollwm/packages
-  duxworm/xdg-desktop-portal-luminous
+  lionheartp/Hyprland
   brycensranch/gpu-screen-recorder-git
 )
 
