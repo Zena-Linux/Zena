@@ -3,9 +3,9 @@
 CONFIG="$HOME/.config/shell"
 PREFERRED_SHELL=""
 
-case "$-" in *i*) ;; *) return 0 ;; esac
-
 [ -n "$SKIP_PREFERRED_SHELL" ] && { unset SKIP_PREFERRED_SHELL; return 0; }
+
+case "$-" in *i*) ;; *) return 0 ;; esac
 
 if [ -r "$CONFIG" ]; then
   PREFERRED_SHELL="$(head -n 1 "$CONFIG" | tr -d '\r')"
