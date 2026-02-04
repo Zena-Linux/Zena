@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+SKIP_PREFERRED_SHELL=1 exec /usr/bin/bash "$@"

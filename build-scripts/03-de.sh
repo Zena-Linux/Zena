@@ -44,7 +44,7 @@ packages=(
 
 dconf update
 
-sed -i 's|^Exec=.*|Exec=/bin/sh -c "niri-session > /dev/null 2>\&1"|' \
+sed -i 's|^Exec=.*|Exec=/usr/local/bin/bash -c "niri-session > /dev/null 2>\&1"|' \
   /usr/share/wayland-sessions/niri.desktop
 
 echo "::endgroup::"
