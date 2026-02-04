@@ -18,7 +18,7 @@ packages=(
   dgop
   danksearch
   quickshell
-  mangowc
+  hyprland-git
 
   adw-gtk3-theme
   papirus-icon-theme
@@ -28,7 +28,6 @@ packages=(
   cava
   matugen
   wl-clipboard
-  scroll
 )
 dnf5 -y install "${packages[@]}"
 
