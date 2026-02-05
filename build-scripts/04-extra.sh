@@ -19,6 +19,9 @@ packages=(
   nautilus
   nautilus-python
 
+  cups
+  gutenprint-cups
+  system-config-printer
   v4l2loopback
 )
 dnf5 -y install "${packages[@]}"
@@ -33,7 +36,5 @@ packages=(
 packages=(
 )
 # dnf5 -y remove "${packages[@]}"
-
-sed -i '/^[[:space:]]*Defaults[[:space:]]\+timestamp_timeout[[:space:]]*=/d;$a Defaults timestamp_timeout=1' /etc/sudoers
 
 echo "::endgroup::"
