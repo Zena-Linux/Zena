@@ -33,6 +33,7 @@ dnf5 -y install "${packages[@]}"
 # Install install_weak_deps=false
 packages=(
   niri
+  mangowc
 )
 
 dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
