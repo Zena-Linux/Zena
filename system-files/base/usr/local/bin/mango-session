@@ -1,0 +1,9 @@
+#!/usr/bin/sh
+
+export WAYLAND_DISPLAY=wayland-1
+export XDG_CURRENT_DESKTOP=MangoWC
+
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+systemctl --user start mango-session.target
+
+exec mango
