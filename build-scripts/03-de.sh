@@ -48,7 +48,7 @@ dconf update
 sed -i 's|^Exec=.*|Exec=/usr/local/bin/bash -c "niri-session > /dev/null 2>\&1"|' \
   /usr/share/wayland-sessions/niri.desktop
 
-sed -i 's|^Exec=.*|Exec=/usr/local/bin/bash -c "mango-session > /dev/null 2>\&1"|' \
+sed -i 's|^Exec=.*|Exec=mango-session|' \
   /usr/share/wayland-sessions/mango.desktop
 
 echo "::endgroup::"
