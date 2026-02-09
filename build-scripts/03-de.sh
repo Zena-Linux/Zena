@@ -45,10 +45,10 @@ packages=(
 
 dconf update
 
-sed -i 's|^Exec=.*|Exec=/usr/local/bin/bash -c "niri-session > /dev/null 2>\&1"|' \
+sed -i 's|^Exec=.*|Exec=bash -c "niri-session > /dev/null 2>\&1"|' \
   /usr/share/wayland-sessions/niri.desktop
 
-sed -i 's|^Exec=.*|Exec=mango-session|' \
+sed -i 's|^Exec=.*|Exec=bash -c "mango -s mango-session > /dev/null 2>\&1"|' \
   /usr/share/wayland-sessions/mango.desktop
 
 echo "::endgroup::"
