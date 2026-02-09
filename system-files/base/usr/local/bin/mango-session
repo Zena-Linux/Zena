@@ -4,6 +4,7 @@ export WAYLAND_DISPLAY=wayland-0
 export XDG_CURRENT_DESKTOP=MangoWC
 
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-systemctl --user start mango-session.target
 
-exec mango
+mango &
+inotifywait -q -e create --include "${WAYLAND_DISPLAY}" "${XDG_RUNTIME_DIR}" --timeout 5
+systemctl --user start mango-session.target
