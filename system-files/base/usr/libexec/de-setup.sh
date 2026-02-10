@@ -19,10 +19,10 @@ create_files() {
 }
 
 create_files "$HOME/.config/niri/dms" \
-    colors.kdl wpblur.kdl cursor.kdl outputs.kdl layout.kdl alttab.kdl binds.kdl
+    colors.kdl wpblur.kdl cursor.kdl layout.kdl outputs.kdl alttab.kdl binds.kdl
 
 create_files "$HOME/.config/mango/dms" \
-    colors.kdl layout.kdl outputs.kdl binds.kdl
+    colors.conf cursor.conf layout.conf outputs.conf binds.conf
 
 FOOT_DIR="$HOME/.config/foot"
 FOOT_CONFIG="$FOOT_DIR/foot.ini"
