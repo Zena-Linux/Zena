@@ -208,4 +208,6 @@ sed -i 's|#LockLayering.*|LockLayering=true|' /etc/rpm-ostreed.conf
 
 sed -i '/^[[:space:]]*Defaults[[:space:]]\+timestamp_timeout[[:space:]]*=/d;$a Defaults timestamp_timeout=1' /etc/sudoers
 
+semodule -i /ctx/patches/homed-patch-01.pp
+
 echo "::endgroup::"
