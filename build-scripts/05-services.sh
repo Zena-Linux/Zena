@@ -17,6 +17,7 @@ system_services=(
   nix-setup.service
   nix-daemon.service
   podman-tcp.service
+  tailscaled.service
   zena-setup.service
   systemd-homed.service
   flatpak-theme.service

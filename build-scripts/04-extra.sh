@@ -23,6 +23,8 @@ packages=(
   gutenprint-cups
   system-config-printer
   v4l2loopback
+
+  tailscale
 )
 dnf5 -y install "${packages[@]}"
 dnf5 -y upgrade nautilus-python --releasever=44
