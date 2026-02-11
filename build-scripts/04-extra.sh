@@ -25,6 +25,7 @@ packages=(
   v4l2loopback
 
   tailscale
+  cloudflare-warp
 )
 dnf5 -y install "${packages[@]}"
 dnf5 -y upgrade nautilus-python --releasever=44

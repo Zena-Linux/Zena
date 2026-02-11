@@ -33,6 +33,7 @@ dnf5 -y install --nogpgcheck --repofrompath \
   'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras,-mesa}
 
 dnf5 config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf5 config-manager addrepo --from-repofile=https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
 
 for copr in "${coprs[@]}"; do
   echo "Enabling copr: $copr"
