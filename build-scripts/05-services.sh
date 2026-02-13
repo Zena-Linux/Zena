@@ -17,6 +17,7 @@ system_services=(
   nix-setup.service
   nix-daemon.service
   podman-tcp.service
+  tailscaled.service
   zena-setup.service
   systemd-homed.service
   flatpak-theme.service
@@ -29,6 +30,7 @@ user_services=(
   podman.socket
   dms-watch.path
   dsearch.service
+  de-setup.service
   foot-server.service
   flathub-setup.service
   gnome-keyring-daemon.socket

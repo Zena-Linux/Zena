@@ -20,19 +20,25 @@ USERNAME=""
 PASSWORD=""
 HOMESIZE=""
 TIMEZONE=""
+LOCALE=""
+KEYMAP=""
 main_menu() {
     local choice=""
     while :; do
         gum style --border thick \
-          "Full name: $FULLNAME" \
-          "Username:  $USERNAME" \
-          "Home Size: $HOMESIZE" \
-          "Timezone:  $TIMEZONE"
+          "Full name:    ${FULLNAME:-"Not set"}" \
+          "Username:     ${USERNAME:-"Not set"}" \
+          "Home Size:    ${HOMESIZE:-"Not set"}" \
+          "Timezone:     ${TIMEZONE:-"Not set"}" \
+          "Locale:       ${LOCALE:-"Not set"}" \
+          "Keyboard:     ${KEYMAP:-"Not set"}"
 
         choice=$(gum choose \
           "Create Account" \
           "Set Home size" \
           "Select Timezone" \
+          "Set Locale" \
+          "Set Keyboard Layout" \
           "Confirm" \
           --limit 1)
         clear
@@ -47,15 +53,20 @@ main_menu() {
             "Select Timezone")
                 select_timezone
                 ;;
+            "Set Locale")
+                select_locale
+                ;;
+            "Set Keyboard Layout")
+                select_keymap
+                ;;
             "Confirm")
-                if [[ -z "$FULLNAME" || -z "$USERNAME" || -z "$PASSWORD" || -z "$HOMESIZE" || -z "$TIMEZONE" ]]; then
+                if [[ -z "$FULLNAME" || -z "$USERNAME" || -z "$PASSWORD" || -z "$HOMESIZE" || -z "$TIMEZONE" || -z "$LOCALE" || -z "$KEYMAP" ]]; then
                     gum style --border thick \
                       "Some fields are missing, please fill them in."
                     continue
                 fi
                 if gum confirm "Confirm" --default=false; then
                     setup
-
                 fi
                 ;;
             *)
@@ -179,16 +190,77 @@ select_timezone() {
     mapfile -t zones < <(timedatectl list-timezones)
 
     while :; do
-        TIMEZONE=$(printf "%s\n" "${zones[@]}" | gum filter --limit 1 --placeholder "Search")
+        TIMEZONE=$(printf "%s\n" "${zones[@]}" | gum filter --limit 1 --placeholder "Search timezone..." --height 20)
         [[ -n "$TIMEZONE" ]] && clear && break
         clear
         gum style --border thick "Timezone selection is required" 2> /dev/null
     done
 }
 
+select_locale() {
+    local available_locales
+
+    mapfile -t available_locales < <(localectl list-locales | grep -v '^$' | sort)
+
+    if [[ ${#available_locales[@]} -eq 0 ]]; then
+        gum style --border thick "No locales found on the system."
+        return
+    fi
+
+    while :; do
+        LOCALE=$(printf "%s\n" "${available_locales[@]}" | gum filter --limit 1 --placeholder "Search locale (e.g., en_US.UTF-8)..." --height 20)
+
+        if [[ -n "$LOCALE" ]]; then
+            if localectl list-locales | grep -q "^${LOCALE}$"; then
+                clear && break
+            else
+                gum style --border thick "Invalid locale selected."
+                LOCALE=""
+                continue
+            fi
+        fi
+        clear
+        gum style --border thick "Locale selection is required" 2> /dev/null
+    done
+}
+
+select_keymap() {
+    local available_keymaps
+
+    mapfile -t available_keymaps < <(localectl list-keymaps | grep -v '^$' | sort)
+
+    if [[ ${#available_keymaps[@]} -eq 0 ]]; then
+        gum style --border thick "No keyboard layouts found on the system."
+        return
+    fi
+
+    while :; do
+        KEYMAP=$(printf "%s\n" "${available_keymaps[@]}" | gum filter --limit 1 --placeholder "Search keyboard layout (e.g., us, de, fr)..." --height 20)
+
+        if [[ -n "$KEYMAP" ]]; then
+            if localectl list-keymaps | grep -q "^${KEYMAP}$"; then
+                clear && break
+            else
+                gum style --border thick "Invalid keyboard layout selected."
+                KEYMAP=""
+                continue
+            fi
+        fi
+        clear
+        gum style --border thick "Keyboard layout selection is required" 2> /dev/null
+    done
+}
+
 setup() {
     timedatectl set-local-rtc 0
     timedatectl set-timezone "$TIMEZONE"
+
+    localectl set-locale "$LOCALE"
+
+    localectl set-keymap "$KEYMAP"
+    if localectl list-x11-keymap-layouts | grep -q "^${KEYMAP}$"; then
+        localectl set-x11-keymap "$KEYMAP"
+    fi
 
     hostnamectl set-hostname zena --static
     hostnamectl set-hostname "Zena" --pretty
