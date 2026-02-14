@@ -36,7 +36,7 @@ packages=(
 )
 
 dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
-dnf5 install matugen --enablerepo=fedora-44 --disablerepo='*copr*'
+dnf5 -y install matugen --releasever=44 --disablerepo='*copr*'
 
 # Uninstall
 packages=(
