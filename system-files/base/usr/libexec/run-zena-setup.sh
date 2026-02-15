@@ -11,4 +11,4 @@ if ! id "$SETUP_USER" &>/dev/null; then
 fi
 
 touch /var/lib/zena-setup.done
-runuser -u "$SETUP_USER" -- "$NIRI_CMD /etc/zena-setup/niri.kdl"
+runuser -u "$SETUP_USER" -- "$NIRI_CMD" --config /etc/zena-setup/niri.kdl
