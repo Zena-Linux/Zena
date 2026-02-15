@@ -18,6 +18,7 @@ packages=(
   dgop
   danksearch
   quickshell
+  gtk4-layer-shell
 
   adw-gtk3-theme
   papirus-icon-theme
