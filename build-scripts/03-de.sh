@@ -26,10 +26,9 @@ packages=(
   xwayland-satellite
 
   cava
-  matugen
   wl-clipboard
 )
-dnf5 -y install "${packages[@]}"
+dnf5 -y install "${packages[@]}" --exclude=matugen
 
 # Install install_weak_deps=false
 packages=(
@@ -38,6 +37,7 @@ packages=(
 )
 
 dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
+dnf5 -y install matugen --releasever=44 --disablerepo='*copr*'
 
 # Uninstall
 packages=(
