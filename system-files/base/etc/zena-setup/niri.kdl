@@ -28,5 +28,5 @@ layout {
 }
 
 binds {
-    Mod+Q { quit; }
+  Ctrl+Alt+Delete { quit; }
 }

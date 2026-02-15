@@ -2,6 +2,7 @@
 contents = """
 %post
 bootc switch --mutate-in-place --transport registry ghcr.io/zena-linux/zena:latest
+mokutil --import /secureboot/MOK.der --password zena
 %end
 """
 
