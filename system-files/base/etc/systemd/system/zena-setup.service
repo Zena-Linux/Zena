@@ -5,13 +5,16 @@ Before=greetd.service getty@tty1.service
 After=home.mount systemd-homed.service
 
 [Service]
-Type=oneshot
-StandardInput=tty
-StandardOutput=tty
-TTYPath=/dev/tty1
-TTYReset=yes
-TTYVHangup=yes
-ExecStart=/usr/libexec/zena-setup.sh
+Type=simple
+ExecStart=/usr/libexec/run-zena-setup.sh
+IgnoreSIGPIPE=no
+SendSIGHUP=yes
+TimeoutStopSec=30s
+KeyringMode=shared
+Restart=always
+RestartSec=1
+StartLimitBurst=5
+StartLimitInterval=30
 
 [Install]
 WantedBy=graphical.target

@@ -169,6 +169,9 @@ dnf5 -y remove "${packages[@]}"
 
 curl -fsSL https://raw.githubusercontent.com/Zena-Linux/zix/refs/heads/main/zix | install -m 755 /dev/stdin /usr/local/bin/zix
 
+curl -fsSL https://github.com/Zena-Linux/Zena-Setup/raw/refs/heads/main/zena-setup | install -m 755 /dev/stdin /usr/libexec/zena-setup
+curl -fsSL https://github.com/Zena-Linux/Zena-Setup/raw/refs/heads/main/zena-setup-daemon | install -m 755 /dev/stdin /usr/libexec/zena-setup-daemon
+
 PRELOAD_TMPDIR=$(mktemp -d)
 git clone https://github.com/miguel-b-p/preload-ng.git "$PRELOAD_TMPDIR"
 mkdir -p "/usr/local/sbin"

@@ -1,3 +1,5 @@
+spawn-at-startup "/usr/libexec/zena-setup"
+
 input {
     keyboard {
         numlock
@@ -15,10 +17,6 @@ hotkey-overlay {
     skip-at-startup
 }
 
-environment {
-    DMS_RUN_GREETER "1"
-}
-
 gestures {
   hot-corners {
     off
@@ -27,4 +25,8 @@ gestures {
 
 layout {
   background-color "#000000"
+}
+
+binds {
+    Mod+Q { quit; }
 }
