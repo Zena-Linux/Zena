@@ -23,7 +23,7 @@ systemd-run --unit=run-zena-setup-gui --service-type=oneshot \
   --property=Before=greetd.service \
   --property=After=home.mount \
   bash -c '
-    exec su - zena-setup -c "exec /usr/bin/niri --config /etc/zena-setup/niri.kdl"' || true
+    exec su - zena-setup -c "RUST_LOG=error exec /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1"' || true
 
 touch /var/lib/zena-setup.done
 userdel -r zena-setup
