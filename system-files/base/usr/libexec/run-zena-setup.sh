@@ -10,6 +10,9 @@ if ! id "$SETUP_USER" &>/dev/null; then
     useradd --system --shell /usr/bin/bash "$SETUP_USER"
 fi
 
+hostnamectl set-hostname zena --static
+hostnamectl set-hostname "Zena" --pretty
+
 chvt 1
 systemctl stop getty@tty1.service
 systemd-run --unit=run-zena-setup-gui --service-type=oneshot \
