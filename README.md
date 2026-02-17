@@ -91,6 +91,8 @@ Switching to Zena from an existing bootc system:
 bootc switch ghcr.io/zena-linux/zena:latest
 ```
 
+KDE flavor images use `greetd` with `dms-greeter`, defaulting to Plasma Wayland (`startplasma-wayland`).
+
 ## Initial setup (first boot)
 
 On first boot the system presents a TUI setup that collects basic account and system settings. The TUI options are:

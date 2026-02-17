@@ -83,7 +83,7 @@ RUN bootc container lint
 
 
 FROM base AS zena-kde
-# COPY system-files/zena/kde /
+COPY system-files/zena/kde /
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/var \

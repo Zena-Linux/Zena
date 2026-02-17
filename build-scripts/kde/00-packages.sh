@@ -8,6 +8,9 @@ shopt -s nullglob
 
 packages=(
   @kde-desktop
+  greetd
+  greetd-selinux
+  dms-greeter
 )
 dnf5 -y install "${packages[@]}"
 
