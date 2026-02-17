@@ -7,51 +7,25 @@ set -ouex pipefail
 shopt -s nullglob
 
 system_services=(
-  nix.mount
-  podman.socket
   greetd.service
-  chronyd.service
-  preload.service
-  thermald.service
-  firewalld.service
-  nix-setup.service
-  nix-daemon.service
-  podman-tcp.service
-  tailscaled.service
-  zena-setup.service
-  systemd-homed.service
   flatpak-theme.service
-  systemd-resolved.service
-  bootc-fetch-apply-updates.service
 )
 
 user_services=(
   dms.service
-  podman.socket
   dms-watch.path
   dsearch.service
   de-setup.service
-  foot-server.service
-  flathub-setup.service
   gnome-keyring-daemon.socket
   gnome-keyring-daemon.service
   dms-greeter-sync-trigger.service
 )
 
 mask_services=(
-  logrotate.timer
-  logrotate.service
-  akmods-keygen.target
-  rpm-ostree-countme.timer
-  rpm-ostree-countme.service
-  systemd-remount-fs.service
-  flatpak-add-fedora-repos.service
-  NetworkManager-wait-online.service
-  akmods-keygen@akmods-keygen.service
 )
 
 systemctl enable "${system_services[@]}"
-systemctl mask "${mask_services[@]}"
+# systemctl mask "${mask_services[@]}"
 systemctl --global enable "${user_services[@]}"
 
 preset_file="/usr/lib/systemd/system-preset/01-zena.preset"

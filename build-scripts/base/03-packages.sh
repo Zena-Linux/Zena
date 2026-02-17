@@ -17,9 +17,15 @@ packages=(
   ############################
   @networkmanager-submodules
   NetworkManager-wifi
+  atheros-firmware
+  brcmfmac-firmware
   iwlegacy-firmware
   iwlwifi-dvm-firmware
   iwlwifi-mvm-firmware
+  mt7xxx-firmware
+  nxpwireless-firmware
+  realtek-firmware
+  tiwilink-firmware
 
   ############################
   # AUDIO / SOUND FIRMWARE   #
@@ -27,6 +33,7 @@ packages=(
   alsa-firmware
   alsa-sof-firmware
   alsa-tools-firmware
+  intel-audio-firmware
 
   ############################
   # SYSTEM / CORE UTILITIES  #
@@ -54,8 +61,6 @@ packages=(
   # DESKTOP PORTALS          #
   ############################
   xdg-desktop-portal
-  xdg-desktop-portal-gtk
-  xdg-desktop-portal-gnome
 
   ############################
   # MOBILE / CAMERA SUPPORT #
@@ -154,10 +159,33 @@ packages=(
 )
 dnf5 -y install "${packages[@]}" --exclude=scx-tools-nightly --exclude=scx-scheds-nightly
 
+
+packages=(
+  fish
+  zsh
+
+  fastfetch
+
+  bazaar
+  firewall-config
+
+  foot
+
+  cups
+  gutenprint-cups
+  system-config-printer
+  v4l2loopback
+
+  tailscale
+  cloudflare-warp
+)
+dnf5 -y install "${packages[@]}"
+
 # Install install_weak_deps=false
 packages=(
+  niri
 )
-# dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
+dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
 
 # Uninstall
 packages=(
@@ -167,8 +195,9 @@ packages=(
 )
 dnf5 -y remove "${packages[@]}"
 
-curl -fsSL https://raw.githubusercontent.com/Zena-Linux/zix/refs/heads/main/zix | install -m 755 /dev/stdin /usr/local/bin/zix
+mv /usr/share/wayland-sessions/niri.desktop /usr/share/wayland-sessions/niri.desktop.disabled
 
+curl -fsSL https://raw.githubusercontent.com/Zena-Linux/zix/refs/heads/main/zix | install -m 755 /dev/stdin /usr/local/bin/zix
 curl -fsSL https://github.com/Zena-Linux/Zena-Setup/raw/refs/heads/main/zena-setup | install -m 755 /dev/stdin /usr/libexec/zena-setup
 curl -fsSL https://github.com/Zena-Linux/Zena-Setup/raw/refs/heads/main/zena-setup-daemon | install -m 755 /dev/stdin /usr/libexec/zena-setup-daemon
 
@@ -181,36 +210,10 @@ chmod 755 "/usr/local/sbin/preload"
 chmod 644 "/etc/preload.conf"
 rm -rf "$PRELOAD_TMPDIR"
 
-XDG_EXT_TMPDIR="$(mktemp -d)"
-curl -fsSLo - "$(curl -fsSL https://api.github.com/repos/tulilirockz/xdg-terminal-exec-nautilus/releases/latest | jq -rc .tarball_url)" | tar -xzvf - -C "${XDG_EXT_TMPDIR}"
-install -Dpm0644 -t "/usr/share/nautilus-python/extensions/" "${XDG_EXT_TMPDIR}"/*/xdg-terminal-exec-nautilus.py
-rm -rf "${XDG_EXT_TMPDIR}"
-
-systemctl set-default graphical.target
-authselect select sssd with-systemd-homed with-faillock without-nullok
-authselect apply-changes
-
-curl -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo && \
-echo "Default=true" | tee -a /etc/flatpak/remotes.d/flathub.flatpakrepo > /dev/null
-flatpak remote-add --if-not-exists --system flathub /etc/flatpak/remotes.d/flathub.flatpakrepo
-flatpak remote-modify --system --enable flathub
-
 tar --create --verbose --preserve-permissions \
   --same-owner \
   --file /etc/nix-setup.tar \
   -C / nix
 
 rm -rf /nix/* /nix/.[!.]*
-
-install -Dpm0644 -t /usr/share/plymouth/themes/spinner/ /ctx/assets/logos/watermark.png
-
-# So it won't reboot on Update
-sed -i 's|^ExecStart=.*|ExecStart=/usr/bin/bootc update --quiet|' /usr/lib/systemd/system/bootc-fetch-apply-updates.service
-sed -i 's|#AutomaticUpdatePolicy.*|AutomaticUpdatePolicy=stage|' /etc/rpm-ostreed.conf
-sed -i 's|#LockLayering.*|LockLayering=true|' /etc/rpm-ostreed.conf
-
-sed -i '/^[[:space:]]*Defaults[[:space:]]\+timestamp_timeout[[:space:]]*=/d;$a Defaults timestamp_timeout=1' /etc/sudoers
-
-semodule -i /ctx/patches/homed-patch-01.pp
-
 echo "::endgroup::"

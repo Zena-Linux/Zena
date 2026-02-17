@@ -21,10 +21,11 @@ for pkg in kernel kernel-core kernel-modules kernel-modules-core; do
   rpm --erase $pkg --nodeps
 done
 rm -rf "/usr/lib/modules/$(ls /usr/lib/modules | head -n1)"
-rm -rf /boot/*
 
 dnf5 -y install "${packages[@]}"
 dnf5 versionlock add "${packages[@]}"
+
+rm -rf /boot/*
 
 dnf5 -y distro-sync
 

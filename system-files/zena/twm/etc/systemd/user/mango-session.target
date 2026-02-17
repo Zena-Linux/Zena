@@ -1,0 +1,4 @@
+[Unit]
+Description=MangoWC Session Target
+Requires=graphical-session.target
+After=graphical-session.target

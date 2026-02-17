@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "$NVIDIA" -eq 0 ]; then
+  exit 0
+fi
+
 echo "::group:: ===$(basename "$0")==="
 
 set -ouex pipefail
