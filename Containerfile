@@ -7,7 +7,7 @@ COPY system-files/assets /assets
 
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS base
 ARG NVIDIA=${NVIDIA}
-COPY system-files/zena/base /
+COPY system-files/zena/common /
 
 # Fix for KeyError: 'vendor' image-builder
 RUN mkdir -p /usr/lib/bootupd/updates \
