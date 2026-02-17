@@ -101,8 +101,18 @@ jobs:
           sep-tags: ' '
           sep-annotations: ' '
 
+
+      - name: Check secure boot key
+        id: secret-check
+        run: |
+          if [ -z "${{ secrets.SECUREBOOT_KEY }}" ]; then
+            echo "present=false" >> $GITHUB_OUTPUT
+          else
+            echo "present=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Decode Secure Boot keys
-        if: ${{ secrets.SECUREBOOT_KEY != '' }}
+        if: steps.secret-check.outputs.present == 'true'
         run: |
           echo "$SECUREBOOT_KEY" | base64 --decode > system-files/base/secureboot/MOK.key
           chmod 600 system-files/base/secureboot/MOK.key
