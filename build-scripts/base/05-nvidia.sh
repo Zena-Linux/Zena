@@ -25,7 +25,7 @@ KVER=$(ls /usr/lib/modules | head -n1)
 dnf5 config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo
 dnf5 config-manager setopt fedora-nvidia.enabled=0
 
-dnf5 -y install --enablerepo=fedora-nvidia akmod-nvidia --setopt=install_weak_deps=False
+dnf5 -y install --enablerepo=fedora-nvidia akmod-nvidia --disablerepo="rpmfusion*" --setopt=install_weak_deps=False
 
 mkdir -p /var/tmp
 chmod 1777 /var/tmp
@@ -33,7 +33,7 @@ chmod 1777 /var/tmp
 akmods --force --kernels "${KVER}" --kmod "nvidia"
 cat /var/cache/akmods/nvidia/*.failed.log || true
 
-dnf5 -y install --enablerepo=fedora-nvidia "${packages[@]}" --setopt=install_weak_deps=False
+dnf5 -y install --enablerepo=fedora-nvidia "${packages[@]}" --disablerepo="rpmfusion*" --setopt=install_weak_deps=False
 dnf5 versionlock add "${packages[@]}"
 
 dnf5 config-manager addrepo --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
