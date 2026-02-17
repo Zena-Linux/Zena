@@ -4,6 +4,7 @@ FROM scratch AS ctx
 COPY build-scripts /
 COPY patches /patches
 COPY system-files/assets /assets
+COPY system-files/zena-nvidia/common /nvidia
 
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS base
 ARG NVIDIA=${NVIDIA}
@@ -77,7 +78,6 @@ RUN bootc container lint
 
 
 FROM zena AS zena-nvidia
-COPY system-files/zena-nvidia/common /
 COPY system-files/zena-nvidia/twm /
 RUN bootc container lint
 
@@ -104,6 +104,5 @@ RUN bootc container lint
 
 
 FROM zena-kde AS zena-kde-nvidia
-COPY system-files/zena-nvidia/common /
 # COPY system-files/zena-nvidia/kde /
 RUN bootc container lint

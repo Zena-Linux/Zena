@@ -6,6 +6,9 @@ set -ouex pipefail
 
 shopt -s nullglob
 
+mkdir -p /var/tmp
+chmod 1777 /var/tmp
+
 KVER=$(ls /usr/lib/modules | head -n1)
 
 echo "Building initramfs for kernel version: $KVER"
