@@ -17,8 +17,10 @@ mask_services=(
   sddm.service
 )
 
-systemctl enable "${system_services[@]}"
+systemctl disable sddm.service || true
 systemctl mask "${mask_services[@]}"
+rm -f /etc/systemd/system/display-manager.service
+systemctl enable "${system_services[@]}"
 
 preset_file="/usr/lib/systemd/system-preset/01-zena.preset"
 touch "$preset_file"
