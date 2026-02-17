@@ -58,4 +58,6 @@ preset_file="/usr/lib/systemd/system-preset/01-zena.preset"
 touch "$preset_file"
 echo "enable nvctk-cdi.service" >> "$preset_file"
 
+dnf5 config-manager setopt "*rpmfusion*".enabled=1
+
 echo "::endgroup::"
