@@ -7,9 +7,12 @@ set -ouex pipefail
 shopt -s nullglob
 
 packages=(
-  @kde-desktop
+  plasma-desktop
+  plasma-login-manager
+  kcm-plasmalogin
+  kwalletmanager
 )
-dnf5 -y install "${packages[@]}"
+dnf5 -y install "${packages[@]}" --releasever=44
 
 # Install install_weak_deps=false
 packages=(

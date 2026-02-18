@@ -161,9 +161,6 @@ dnf5 -y install "${packages[@]}" --exclude=scx-tools-nightly --exclude=scx-sched
 
 
 packages=(
-  fish
-  zsh
-
   fastfetch
 
   bazaar
