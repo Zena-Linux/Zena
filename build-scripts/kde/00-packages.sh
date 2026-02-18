@@ -8,11 +8,9 @@ shopt -s nullglob
 
 packages=(
   plasma-desktop
-  plasma-login-manager
-  kcm-plasmalogin
-  kwalletmanager
+  sddm
 )
-dnf5 -y install "${packages[@]}" --releasever=44
+dnf5 -y install "${packages[@]}"
 
 # Install install_weak_deps=false
 packages=(
