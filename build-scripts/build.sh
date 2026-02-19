@@ -65,7 +65,7 @@ case "$FLAVOR" in
 esac
 
 for mod in "${modules[@]}"; do
-    path="modules/${mod//./\/}.sh"
+    path="/ctx/modules/${mod//./\/}.sh"
     echo "::group:: === $(basename "$path") ==="
     bash "$path"
     echo "::endgroup::"
