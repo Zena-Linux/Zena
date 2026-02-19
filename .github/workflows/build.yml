@@ -121,12 +121,10 @@ jobs:
 
       - name: Prepare build args file
         run: |
-          echo "FEDORA_VERSION=${{ env.FEDORA_VERSION }}" >> build_args.txt
-          if [[ "${{ matrix.flavor }}" == *"nvidia"* ]]; then
-            echo "NVIDIA=1" >> build_args.txt
-          else
-            echo "NVIDIA=0" >>build_args.txt
-          fi
+          cat <<'EOF' >>build_args.txt
+          FEDORA_VERSION=${{ env.FEDORA_VERSION }}
+          FLAVOR=${{ env.IMAGE_NAME }}
+          EOF
 
       - name: Build Image
         id: build_image

@@ -1,39 +1,16 @@
-#!/bin/bash
-
-echo "::group:: ===$(basename "$0")==="
-
 set -ouex pipefail
 
 shopt -s nullglob
 
-semodule -i /ctx/patches/homed-patch-01.pp
+RELEASE="$(rpm -E %fedora)"
+DATE=$(date +%Y%m%d)
 
-
-systemctl set-default graphical.target
-authselect select sssd with-systemd-homed with-faillock without-nullok
-authselect apply-changes
-
-
-# So it won't reboot on Update
 sed -i 's|^ExecStart=.*|ExecStart=/usr/bin/bootc update --quiet|' /usr/lib/systemd/system/bootc-fetch-apply-updates.service
 sed -i 's|#AutomaticUpdatePolicy.*|AutomaticUpdatePolicy=stage|' /etc/rpm-ostreed.conf
 sed -i 's|#LockLayering.*|LockLayering=true|' /etc/rpm-ostreed.conf
 
-
-install -Dpm0644 -t /usr/share/plymouth/themes/spinner/ /ctx/assets/logos/watermark.png
 sed -i '/^[[:space:]]*Defaults[[:space:]]\+timestamp_timeout[[:space:]]*=/d;$a Defaults timestamp_timeout=1' /etc/sudoers
 
-
-curl -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo && \
-echo "Default=true" | tee -a /etc/flatpak/remotes.d/flathub.flatpakrepo > /dev/null
-flatpak remote-add --if-not-exists --system flathub /etc/flatpak/remotes.d/flathub.flatpakrepo
-flatpak remote-modify --system --enable flathub
-
-
-RELEASE="$(rpm -E %fedora)"
-DATE=$(date +%Y%m%d)
-
-echo "zena" | tee "/etc/hostname"
 sed -i -f - /usr/lib/os-release <<EOF
 s|^NAME=.*|NAME=\"Zena\"|
 s|^ID=.*|ID=\"zena\"|
@@ -52,5 +29,3 @@ s|^DEFAULT_HOSTNAME=.*|DEFAULT_HOSTNAME="zena"|
 /^REDHAT_SUPPORT_PRODUCT=/d
 /^REDHAT_SUPPORT_PRODUCT_VERSION=/d
 EOF
-
-echo "::endgroup::"

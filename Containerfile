@@ -6,103 +6,17 @@ COPY patches /patches
 COPY system-files/assets /assets
 COPY system-files/zena-nvidia/common /nvidia
 
-FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS base
-ARG NVIDIA=${NVIDIA}
+FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
+ARG FLAVOR=${FLAVOR}
 COPY system-files/zena/common /
 
-# Fix for KeyError: 'vendor' image-builder
 RUN mkdir -p /usr/lib/bootupd/updates \
     && cp -r /usr/lib/efi/*/*/* /usr/lib/bootupd/updates
 
-
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/var \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/00-dnf.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/01-kernel.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/02-packages.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/03-system.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/04-services.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/05-nvidia.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/06-signing.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/base/07-initramfs.sh
+    /ctx/build.sh
 
 
-FROM base AS zena
-COPY system-files/zena/twm /
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/twm/00-packages.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/twm/01-services.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/10-finalize.sh
-
-RUN bootc container lint
-
-
-FROM zena AS zena-nvidia
-COPY system-files/zena-nvidia/twm /
-RUN bootc container lint
-
-
-FROM base AS zena-kde
-# COPY system-files/zena/kde /
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/kde/00-packages.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/kde/01-services.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/10-finalize.sh
-
-RUN bootc container lint
-
-
-FROM zena-kde AS zena-kde-nvidia
-# COPY system-files/zena-nvidia/kde /
 RUN bootc container lint

@@ -1,7 +1,3 @@
-#!/bin/bash
-
-echo "::group:: ===$(basename "$0")==="
-
 set -ouex pipefail
 
 shopt -s nullglob
@@ -15,18 +11,15 @@ user_services=(
   dms.service
   dms-watch.path
   dsearch.service
-  de-setup.service
+  wm-setup.service
+  flathub-setup.service
   gnome-keyring-daemon.socket
   gnome-keyring-daemon.service
   dms-greeter-sync-trigger.service
 )
 
-mask_services=(
-)
-
 systemctl enable "${system_services[@]}"
-# systemctl mask "${mask_services[@]}"
-systemctl --global enable "${user_services[@]}"
+systemctl mask "${mask_services[@]}"
 
 preset_file="/usr/lib/systemd/system-preset/01-zena.preset"
 touch "$preset_file"
@@ -44,5 +37,3 @@ for service in "${user_services[@]}"; do
 done
 
 systemctl --global preset-all
-
-echo "::endgroup::"

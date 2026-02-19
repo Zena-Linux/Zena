@@ -1,37 +1,26 @@
-#!/bin/bash
-
-echo "::group:: ===$(basename "$0")==="
-
 set -ouex pipefail
 
 shopt -s nullglob
 
 system_services=(
-  nix.mount
+  bootc-fetch-apply-updates.service
   podman.socket
   chronyd.service
-  preload.service
-  thermald.service
   firewalld.service
-  nix-setup.service
-  nix-daemon.service
   podman-tcp.service
-  tailscaled.service
   zena-setup.service
-  systemd-homed.service
   systemd-resolved.service
-  bootc-fetch-apply-updates.service
+  tailscaled.service
 )
 
 user_services=(
   podman.socket
-  foot-server.service
   flathub-setup.service
 )
 
 mask_services=(
-  logrotate.timer
   logrotate.service
+  logrotate.timer
   akmods-keygen.target
   rpm-ostree-countme.timer
   rpm-ostree-countme.service
@@ -49,7 +38,7 @@ preset_file="/usr/lib/systemd/system-preset/01-zena.preset"
 touch "$preset_file"
 
 for service in "${system_services[@]}"; do
-  echo "enable $service" >> "$preset_file"
+    echo "enable $service" >> "$preset_file"
 done
 
 mkdir -p "/etc/systemd/user-preset/"
@@ -57,9 +46,7 @@ preset_file="/etc/systemd/user-preset/01-zena.preset"
 touch "$preset_file"
 
 for service in "${user_services[@]}"; do
-  echo "enable $service" >> "$preset_file"
+    echo "enable $service" >> "$preset_file"
 done
 
 systemctl --global preset-all
-
-echo "::endgroup::"

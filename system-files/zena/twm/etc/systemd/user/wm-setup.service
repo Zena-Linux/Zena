@@ -4,7 +4,7 @@ Before=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/libexec/de-setup.sh
+ExecStart=/usr/libexec/wm-setup.sh
 RemainAfterExit=true
 
 [Install]

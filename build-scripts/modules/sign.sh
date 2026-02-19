@@ -1,18 +1,8 @@
-#!/bin/bash
-
-if [ ! -f "$SIGN_DIR/MOK.key" ]; then
-  exit 0
-fi
-
-echo "::group:: ===$(basename "$0")==="
-
 set -ouex pipefail
 
 shopt -s nullglob
 
 KVER=$(ls /usr/lib/modules | head -n1)
-ls "/usr/lib/modules"
-ls "/usr/lib/modules/$KVER"
 KIMAGE="/usr/lib/modules/$KVER/vmlinuz"
 SIGN_DIR="/secureboot"
 
@@ -47,5 +37,3 @@ find "/lib/modules/$KVER" -type f -name '*.ko.xz' -print0 | while IFS= read -r -
 done
 
 rm -f "$SIGN_DIR/MOK.key"
-
-echo "::endgroup::"
