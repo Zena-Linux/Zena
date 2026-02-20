@@ -32,9 +32,11 @@ packages=(
   cups
   cups-pk-helper
   dymo-cups-drivers
+  gutenprint-cups
   hplip
   printer-driver-brlaser
   ptouch-driver
+  system-config-printer
   system-config-printer-libs
   system-config-printer-udev
 
@@ -89,6 +91,7 @@ packages=(
   fuse
   fuse-common
   fwupd
+  inotify-tools
   libcamera
   libcamera-v4l2
   libcamera-gstreamer
@@ -109,13 +112,16 @@ packages=(
   whois
   xdg-user-dirs
   xdg-terminal-exec
+  zenity
 
   # Extra
   bazaar
   cloudflare-warp
   fastfetch
   firewall-config
+  glx-utils
   tailscale
+  v4l2loopback
 )
 
 dnf5 -y install "${packages[@]}"
@@ -125,11 +131,8 @@ packages=(
   niri
   python3-gobject
   gtk4
-  gtk4-devel
   gtk4-layer-shell
-  gtk4-layer-shell-devel
   webkitgtk6.0
-  webkitgtk6.0-devel
 )
 
 dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
