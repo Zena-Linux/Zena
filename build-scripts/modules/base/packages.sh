@@ -127,6 +127,7 @@ dnf5 -y install "${packages[@]}"
 
 # Dependencies for the First Boot Setup
 packages=(
+  cage
   niri
   python3-gobject
   gtk4

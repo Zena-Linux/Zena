@@ -15,7 +15,7 @@ hostnamectl set-hostname "Zena" --pretty
 
 chvt 1
 systemctl stop getty@tty1.service
-systemd-run --unit=run-zena-setup-gui --service-type=oneshot \
+systemd-run --unit=zena-setup-gui --service-type=oneshot \
   --description="Zena Setup" \
   --property=StandardInput=tty \
   --property=TTYPath=/dev/tty1 \

@@ -21,9 +21,9 @@ fi
 GREETER_CACHE="/var/cache/dms-greeter"
 mkdir -p "$GREETER_CACHE"
 
-cp "/home/$ACTIVE_USER/.config/DankMaterialShell/settings.json" "$GREETER_CACHE/settings.json"
-cp "/home/$ACTIVE_USER/.local/state/DankMaterialShell/session.json" "$GREETER_CACHE/session.json"
-cp "/home/$ACTIVE_USER/.cache/DankMaterialShell/dms-colors.json" "$GREETER_CACHE/colors.json"
+cp "/home/$ACTIVE_USER/.config/DankMaterialShell/settings.json" "$GREETER_CACHE/settings.json" || true
+cp "/home/$ACTIVE_USER/.local/state/DankMaterialShell/session.json" "$GREETER_CACHE/session.json" || true
+cp "/home/$ACTIVE_USER/.cache/DankMaterialShell/dms-colors.json" "$GREETER_CACHE/colors.json" || true
 
 WP_PATH_FILE="/home/$ACTIVE_USER/.cache/DankMaterialShell/wallpaper"
 if [ -f "$WP_PATH_FILE" ]; then
@@ -33,7 +33,7 @@ if [ -f "$WP_PATH_FILE" ]; then
     fi
 fi
 
-sed -i 's|"wallpaperPath": *"[^"]*"|"wallpaperPath": "'"$GREETER_CACHE"/wallpaper.png'"|' "$GREETER_CACHE/session.json"
+sed -i 's|"wallpaperPath": *"[^"]*"|"wallpaperPath": "'"$GREETER_CACHE"/wallpaper.png'"|' "$GREETER_CACHE/session.json" || true
 
 chown -R greeter:greeter "$GREETER_CACHE"
 chmod -R a+r "$GREETER_CACHE"
