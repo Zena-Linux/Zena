@@ -7,8 +7,9 @@ COPY system-files/assets /assets
 COPY system-files/ /system-files
 
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
+COPY system-files/common /
+
 ARG FLAVOR=${FLAVOR}
-COPY system-files/zena/common /
 
 RUN mkdir -p /usr/lib/bootupd/updates \
     && cp -r /usr/lib/efi/*/*/* /usr/lib/bootupd/updates
