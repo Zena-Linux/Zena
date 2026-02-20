@@ -83,20 +83,23 @@ def install():
     ])
 
     print("Exporting apps to host...")
-    desktop_files = [
-        "/usr/share/applications/heroic.desktop",
-        "/usr/share/applications/io.github.benjamimgois.goverlay.desktop",
-        "/usr/share/applications/net.davidotek.pupgui2.desktop",
-        "/usr/share/applications/net.lutris.Lutris.desktop",
-        "/usr/share/applications/steam.desktop",
+    desktop_patterns = [
+        "/usr/share/applications/*protontricks*",
+        "/usr/share/applications/*heroicgames*",
+        "/usr/share/applications/*goverlay*",
+        "/usr/share/applications/*pupgui*",
+        "/usr/share/applications/*Lutris*",
+        "/usr/share/applications/*steam*",
     ]
 
-    for file in desktop_files:
-        run([
+    for pattern in desktop_patterns:
+        cmd = [
             "distrobox", "enter", CONTAINER_NAME,
-            "--", "distrobox-export",
-            "--app", file,
-        ])
+            "--", "sh", "-c",
+            f'for f in {pattern}; do if [ -f "$f" ]; \
+            then distrobox-export --app "$f"; fi; done'
+        ]
+        run(cmd)
 
     print("Exporting binary launchers to host...")
     bin_paths = [

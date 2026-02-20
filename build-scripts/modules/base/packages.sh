@@ -119,8 +119,6 @@ packages=(
   firewall-config
   flatpak
   glx-utils
-  plymouth
-  plymouth-system-theme
   tailscale
   v4l2loopback
 )
