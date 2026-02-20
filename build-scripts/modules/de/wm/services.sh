@@ -19,7 +19,6 @@ user_services=(
 )
 
 systemctl enable "${system_services[@]}"
-systemctl mask "${mask_services[@]}"
 
 preset_file="/usr/lib/systemd/system-preset/01-zena.preset"
 touch "$preset_file"
