@@ -127,7 +127,7 @@ dnf5 -y install "${packages[@]}"
 
 # Dependencies for the First Boot Setup
 packages=(
-  cage
+  niri
   python3-gobject
   gtk4
   gtk4-layer-shell
@@ -135,6 +135,7 @@ packages=(
 )
 
 dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
+mv /usr/share/wayland-sessions/niri.desktop /usr/share/wayland-sessions/niri.desktop.disabled
 
 # First Boot Setup GUI
 curl -fsSL https://github.com/Zena-Linux/Zena-Setup/raw/refs/heads/main/zena-setup | install -m 755 /dev/stdin /usr/libexec/zena-setup
