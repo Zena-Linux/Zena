@@ -114,7 +114,7 @@ jobs:
       - name: Decode Secure Boot keys
         if: steps.secret-check.outputs.present == 'true'
         run: |
-          echo "$SECUREBOOT_KEY" | base64 --decode > system-files/zena/common/secureboot/MOK.key
+          echo "$SECUREBOOT_KEY" | base64 --decode > system-files/common/secureboot/MOK.key
           chmod 600 system-files/zena/common/secureboot/MOK.key
         env:
           SECUREBOOT_KEY: ${{ secrets.SECUREBOOT_KEY }}
