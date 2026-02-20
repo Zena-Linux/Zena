@@ -36,7 +36,6 @@ packages=(
   hplip
   printer-driver-brlaser
   ptouch-driver
-  system-config-printer
   system-config-printer-libs
   system-config-printer-udev
 
