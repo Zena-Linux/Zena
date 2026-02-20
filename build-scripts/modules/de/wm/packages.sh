@@ -39,6 +39,7 @@ dnf5 -y install "${packages[@]}" --exclude=matugen
 dnf5 -y install nautilus-python matugen --releasever=44 --disablerepo='*copr*'
 
 packages=(
+  niri
   mangowc
 )
 
@@ -51,7 +52,6 @@ rm -rf "${XDG_EXT_TMPDIR}"
 
 dconf update
 systemctl set-default graphical.target
-mv /usr/share/wayland-sessions/niri.desktop.disabled /usr/share/wayland-sessions/niri.desktop
 sed -i 's|^Exec=.*|Exec=bash -c "niri-session > /dev/null 2>\&1"|' \
   /usr/share/wayland-sessions/niri.desktop
 
