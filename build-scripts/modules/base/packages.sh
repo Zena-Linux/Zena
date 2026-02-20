@@ -112,7 +112,6 @@ packages=(
   whois
   xdg-user-dirs
   xdg-terminal-exec
-  zenity
 
   # Extra
   bazaar
