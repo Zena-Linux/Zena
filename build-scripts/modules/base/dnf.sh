@@ -26,6 +26,8 @@ coprs=(
   ulysg/xwayland-satellite
   avengemedia/danklinux
   avengemedia/dms
+
+  che/nerd-fonts
 )
 
 for copr in "${coprs[@]}"; do

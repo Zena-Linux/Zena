@@ -4,7 +4,7 @@ FROM scratch AS ctx
 COPY build-scripts /
 COPY patches /patches
 COPY system-files/assets /assets
-COPY system-files/zena-nvidia/common /nvidia
+COPY system-files/ /system-files
 
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
 ARG FLAVOR=${FLAVOR}

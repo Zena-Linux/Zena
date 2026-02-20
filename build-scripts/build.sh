@@ -17,6 +17,8 @@ case "$FLAVOR" in
       "de.wm.services"
       "integrations.homed"
       "integrations.nix"
+      "sign"
+      "initramfs"
     )
     ;;
   zena-nvidia)
@@ -31,6 +33,8 @@ case "$FLAVOR" in
       "integrations.homed"
       "integrations.nix"
       "integrations.nvidia"
+      "sign"
+      "initramfs"
     )
     ;;
   zena-kde)
@@ -43,6 +47,8 @@ case "$FLAVOR" in
       "de.kde.packages"
       "integrations.homed"
       "integrations.nix"
+      "sign"
+      "initramfs"
     )
     ;;
   zena-kde-nvidia)
@@ -56,6 +62,8 @@ case "$FLAVOR" in
       "integrations.homed"
       "integrations.nix"
       "integrations.nvidia"
+      "sign"
+      "initramfs"
     )
     ;;
   *)
