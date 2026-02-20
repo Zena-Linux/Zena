@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "=== Building variant: $FLAVOR ==="
+echo "=== Building: $IMAGE ==="
 
 modules=()
 
-case "$FLAVOR" in
+case "$IMAGE" in
   zena)
     cp -avf "/ctx/system-files/twm/." /
     modules=(
@@ -73,7 +73,7 @@ case "$FLAVOR" in
     )
     ;;
   *)
-    echo "Unknown variant: $FLAVOR"
+    echo "Unknown image: $IMAGE"
     exit 1
     ;;
 esac
@@ -85,4 +85,4 @@ for mod in "${modules[@]}"; do
     echo "::endgroup::"
 done
 
-echo "==> Build complete: $FLAVOR"
+echo "==> Build complete: $IMAGE"

@@ -123,7 +123,7 @@ jobs:
         run: |
           cat <<'EOF' >>build_args.txt
           FEDORA_VERSION=${{ env.FEDORA_VERSION }}
-          FLAVOR=${{ env.IMAGE_NAME }}
+          IMAGE=${{ env.IMAGE_NAME }}
           EOF
 
       - name: Build Image
