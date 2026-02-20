@@ -7,6 +7,7 @@ modules=()
 
 case "$FLAVOR" in
   zena)
+    cp -avf "/ctx/system-files/twm/." /
     modules=(
       "base.dnf"
       "base.kernel"
@@ -22,6 +23,8 @@ case "$FLAVOR" in
     )
     ;;
   zena-nvidia)
+    cp -avf "/ctx/system-files/twm/." /
+    cp -avf "/ctx/system-files/nvidia/." /
     modules=(
       "base.dnf"
       "base.kernel"
@@ -38,6 +41,7 @@ case "$FLAVOR" in
     )
     ;;
   zena-kde)
+    # cp -avf "/ctx/system-files/kde/." /
     modules=(
       "base.dnf"
       "base.kernel"
@@ -52,6 +56,8 @@ case "$FLAVOR" in
     )
     ;;
   zena-kde-nvidia)
+    # cp -avf "/ctx/system-files/kde/." /
+    cp -avf "/ctx/system-files/nvidia/." /
     modules=(
       "base.dnf"
       "base.kernel"
