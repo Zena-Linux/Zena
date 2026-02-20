@@ -38,6 +38,11 @@ packages=(
 dnf5 -y install "${packages[@]}" --exclude=matugen
 dnf5 -y install nautilus-python matugen --releasever=44 --disablerepo='*copr*'
 
+packages=(
+  mangowc
+)
+
+dnf5 -y install "${packages[@]}" --setopt=install_weak_deps=False
 
 XDG_EXT_TMPDIR="$(mktemp -d)"
 curl -fsSLo - "$(curl -fsSL https://api.github.com/repos/tulilirockz/xdg-terminal-exec-nautilus/releases/latest | jq -rc .tarball_url)" | tar -xzvf - -C "${XDG_EXT_TMPDIR}"
