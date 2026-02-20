@@ -1,0 +1,12 @@
+[Unit]
+Description=Add Flathub remote for user flatpak installs
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=!%h/.local/share/flatpak/repo/flathub.trustedkeys.gpg
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+[Install]
+WantedBy=default.target
