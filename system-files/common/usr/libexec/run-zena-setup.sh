@@ -1,6 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
+if [ -f /var/lib/zena-setup.done ]; then
+    exit 0
+fi
+
 SETUP_USER="zena-setup"
 NIRI_CMD="/usr/bin/niri"
 
