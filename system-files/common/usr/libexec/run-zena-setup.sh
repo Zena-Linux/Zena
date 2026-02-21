@@ -23,6 +23,6 @@ systemd-run --unit=zena-setup-gui --service-type=oneshot \
   --property=Before=greetd.service \
   --property=After=home.mount \
   bash -c '
-    su - zena-setup -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1"; userdel -r zena-setup && exit 0' || true
+    su -s /bin/sh -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1" zena-setup; sleep 5 && userdel -r zena-setup && exit 0' || true
 
 exit 0
