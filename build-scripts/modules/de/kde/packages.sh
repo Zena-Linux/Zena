@@ -7,11 +7,7 @@ packages=(
 )
 dnf5 -y install "${packages[@]}"
 
-# Replace default icons with Zena icons
-TARGET_GLOB='/var/home/*/.config/plasma-org.kde.plasma.desktop-appletsrc'
-TARGET_ICON='/usr/share/icons/cachyos.svg'
+cp -r /usr/share/icons/cachyos.svg /usr/share/icons/hicolor/scalable/apps/start-here.svg
+cp -r /usr/share/icons/cachyos.svg /usr/share/icons/hicolor/scalable/distributor-logo.svg
+cp -r /usr/share/icons/cachyos.svg /usr/share/icons/hicolor/scalable/places/auralogo-symbolic.svg
 
-for file in $TARGET_GLOB; do
-  [[ -f "$file" ]] || continue
-  sed -i "s|^icon=.*|icon=${TARGET_ICON}|" "$file"
-done
