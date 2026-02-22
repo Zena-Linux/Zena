@@ -17,16 +17,16 @@ fi
 hostnamectl set-hostname zena --static
 hostnamectl set-hostname "Zena" --pretty
 
-chvt 1
-systemctl stop getty@tty1.service
-systemd-run --unit=zena-setup-gui --service-type=oneshot \
+chvt 5
+systemctl stop getty@tty5.service
+systemd-run --unit=zena-setup-gui1 --service-type=oneshot \
   --description="Zena Setup" \
   --property=StandardInput=tty \
-  --property=TTYPath=/dev/tty1 \
+  --property=TTYPath=/dev/tty5 \
   --property=User=root \
   --property=Before=greetd.service \
   --property=After=home.mount \
   bash -c '
-    su -s /bin/sh -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1" zena-setup; sleep 5 && userdel -r zena-setup && exit 0' || true
+    su -s /bin/sh -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1" zena-setup; sleep 1 && userdel -r zena-setup && exit 0' || true
 
 exit 0
