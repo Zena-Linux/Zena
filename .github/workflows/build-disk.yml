@@ -57,7 +57,7 @@ jobs:
         uses: osbuild/bootc-image-builder-action@main
         with:
           builder-image: ghcr.io/zena-linux/bootc-image-builder:latest
-          config-file: iso/${{ env.IMAGE_NAME }}.toml
+          config-file: ./iso/${{ env.IMAGE_NAME }}.toml
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           types: anaconda-iso
           rootfs: btrfs
