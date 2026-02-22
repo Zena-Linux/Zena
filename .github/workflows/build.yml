@@ -55,6 +55,7 @@ jobs:
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
 
       - name: Set tag prefix
+        if: github.ref_name != 'main'
         run: |
           echo "TAG_PREFIX=${{ github.ref_name }}." >> $GITHUB_ENV
 
