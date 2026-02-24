@@ -19,7 +19,6 @@ if systemctl list-unit-files sddm.service >/dev/null 2>&1; then
 fi
 
 /usr/libexec/zena-setup-daemon &
-disown
 
 if ! id "$SETUP_USER" &>/dev/null; then
     useradd --system --shell /usr/bin/bash "$SETUP_USER"
@@ -38,11 +37,6 @@ systemd-run --unit=zena-setup-gui --service-type=oneshot \
   --property=Before=greetd.service \
   --property=After=home.mount \
   bash -c '
-    setsid su -s /bin/sh zena-setup -c "
-      nohup RUST_LOG=error /usr/bin/niri \
-        --config /etc/zena-setup/niri.kdl \
-      > /dev/null 2>&1 < /dev/null &
-    "
-    exit 0
-  '
+    su -s /bin/sh zena-setup -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1"; exit 0'
+
 exit 0
