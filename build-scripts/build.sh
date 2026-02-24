@@ -14,7 +14,7 @@ modules=(
 case "$IMAGE" in
   zena)
     cp -avf "/ctx/system-files/twm/." /
-    modules=(
+    modules+=(
       "de.wm.packages"
       "de.wm.services"
     )
@@ -22,7 +22,7 @@ case "$IMAGE" in
   zena-nvidia)
     cp -avf "/ctx/system-files/twm/." /
     cp -avf "/ctx/system-files/nvidia/." /
-    modules=(
+    modules+=(
       "de.wm.packages"
       "de.wm.services"
       "integrations.nvidia"
@@ -30,14 +30,14 @@ case "$IMAGE" in
     ;;
   zena-kde)
     # cp -avf "/ctx/system-files/kde/." /
-    modules=(
+    modules+=(
       "de.kde.packages"
     )
     ;;
   zena-kde-nvidia)
     # cp -avf "/ctx/system-files/kde/." /
     cp -avf "/ctx/system-files/nvidia/." /
-    modules=(
+    modules+=(
       "de.kde.packages"
       "integrations.nvidia"
     )
