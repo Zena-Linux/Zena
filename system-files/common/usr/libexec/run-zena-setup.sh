@@ -8,6 +8,16 @@ fi
 SETUP_USER="zena-setup"
 NIRI_CMD="/usr/bin/niri"
 
+if systemctl list-unit-files display-manager.service >/dev/null 2>&1; then
+  systemctl mask --runtime display-manager.service
+fi
+if systemctl list-unit-files greetd.service >/dev/null 2>&1; then
+  systemctl mask --runtime greetd.service
+fi
+if systemctl list-unit-files sddm.service >/dev/null 2>&1; then
+  systemctl mask --runtime sddm.service
+fi
+
 /usr/libexec/zena-setup-daemon &
 
 if ! id "$SETUP_USER" &>/dev/null; then
@@ -19,7 +29,7 @@ hostnamectl set-hostname "Zena" --pretty
 
 chvt 5
 systemctl stop getty@tty5.service
-systemd-run --unit=zena-setup-gui1 --service-type=oneshot \
+systemd-run --unit=zena-setup-gui --service-type=oneshot \
   --description="Zena Setup" \
   --property=StandardInput=tty \
   --property=TTYPath=/dev/tty5 \
@@ -27,6 +37,6 @@ systemd-run --unit=zena-setup-gui1 --service-type=oneshot \
   --property=Before=greetd.service \
   --property=After=home.mount \
   bash -c '
-    su -s /bin/sh -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1" zena-setup; sleep 1 && userdel -r zena-setup && exit 0' || true
+    su -s /bin/sh zena-setup -c "RUST_LOG=error /usr/bin/niri --config /etc/zena-setup/niri.kdl > /dev/null 2>&1"; exit 0'
 
 exit 0

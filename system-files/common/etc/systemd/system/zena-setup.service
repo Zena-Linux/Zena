@@ -1,20 +1,14 @@
 [Unit]
 Description=Zena Setup
 ConditionPathExists=!/var/lib/zena-setup.done
-After=graphical.target greetd.service sddm.service
-Requires=display-manager.service
+Before=display-manager.service greetd.service sddm.service
+After=basic.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/libexec/run-zena-setup.sh
-RemainAfterExit=no
-IgnoreSIGPIPE=no
-SendSIGHUP=yes
+RemainAfterExit=yes
 TimeoutStopSec=30s
-KeyringMode=shared
-SuccessExitStatus=0
-Restart=no
-ExecStartPost=/usr/bin/systemctl --no-block reboot
 
 [Install]
-WantedBy=graphical.target
+WantedBy=basic.target
