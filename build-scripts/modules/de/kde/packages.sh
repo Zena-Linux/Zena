@@ -7,7 +7,8 @@ packages=(
 )
 dnf5 -y install "${packages[@]}"
 
-cp -r /usr/share/icons/cachyos.svg /usr/share/icons/hicolor/scalable/apps/start-here.svg
-cp -r /usr/share/icons/cachyos.svg /usr/share/icons/hicolor/scalable/distributor-logo.svg
-cp -r /usr/share/icons/cachyos.svg /usr/share/icons/hicolor/scalable/places/auralogo-symbolic.svg
+# Replace default icon with Zena icon
+TARGET_ICON='/usr/share/icons/hicolor/scalable/apps/start-here.svg'
+ZENA_ICON='/usr/share/icons/cachyos.svg'
 
+ln -sf "$ZENA_ICON" "$TARGET_ICON"
