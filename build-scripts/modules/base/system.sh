@@ -13,6 +13,11 @@ install -Dpm0644 -t /usr/share/plymouth/themes/spinner/ /ctx/assets/logos/waterm
 
 sed -i '/^[[:space:]]*Defaults[[:space:]]\+timestamp_timeout[[:space:]]*=/d;$a Defaults timestamp_timeout=1' /etc/sudoers
 
+curl -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo && \
+echo "Default=true" | tee -a /etc/flatpak/remotes.d/flathub.flatpakrepo > /dev/null
+flatpak remote-add --if-not-exists --system flathub /etc/flatpak/remotes.d/flathub.flatpakrepo
+flatpak remote-modify --system --enable flathub
+
 sed -i -f - /usr/lib/os-release <<EOF
 s|^NAME=.*|NAME=\"Zena\"|
 s|^ID=.*|ID=\"zena\"|
