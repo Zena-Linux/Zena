@@ -4,8 +4,33 @@ shopt -s nullglob
 
 semodule -i /ctx/patches/homed-patch-01.pp
 
-authselect select sssd with-systemd-homed with-faillock without-nullok
-authselect apply-changes
+auth_features=(
+  with-systemd-homed
+  with-faillock
+  without-nullok
+)
+
+if [[ "${IMAGE:-}" == zena-kde* ]]; then
+  auth_profile="local"
+else
+  auth_profile="sssd"
+fi
+
+if ! authselect select "$auth_profile" "${auth_features[@]}"; then
+  echo "ERROR: authselect profile selection failed" >&2
+  echo "  image: ${IMAGE:-<unset>}" >&2
+  echo "  profile: $auth_profile" >&2
+  echo "  features: ${auth_features[*]}" >&2
+  exit 1
+fi
+
+if ! authselect apply-changes; then
+  echo "ERROR: authselect apply-changes failed" >&2
+  echo "  image: ${IMAGE:-<unset>}" >&2
+  echo "  profile: $auth_profile" >&2
+  echo "  features: ${auth_features[*]}" >&2
+  exit 1
+fi
 
 system_services=(
   systemd-homed.service
