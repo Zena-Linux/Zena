@@ -16,7 +16,7 @@ packages=(
   kf6-kimageformats
   nautilus
   papirus-icon-theme
-  quickhell
+  quickshell
   xdg-desktop-portal-gtk
   xdg-desktop-portal-gnome
   wl-clipboard
