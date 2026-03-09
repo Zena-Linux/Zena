@@ -15,6 +15,8 @@ system_services=(
 
 user_services=(
   podman.socket
+  ssh-agent.service
+  gpg-agent.service
   flathub-setup.service
 )
 
