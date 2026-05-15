@@ -115,7 +115,6 @@ packages=(
 
   # Extra
   bazaar
-  cloudflare-warp
   fastfetch
   firewall-config
   flatpak

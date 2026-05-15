@@ -42,38 +42,6 @@ case "$IMAGE" in
       "initramfs"
     )
     ;;
-  zena-kde)
-    # cp -avf "/ctx/system-files/kde/." /
-    modules=(
-      "base.dnf"
-      "base.kernel"
-      "base.packages"
-      "base.system"
-      "base.services"
-      "de.kde.packages"
-      "integrations.homed"
-      "integrations.nix"
-      "sign"
-      "initramfs"
-    )
-    ;;
-  zena-kde-nvidia)
-    # cp -avf "/ctx/system-files/kde/." /
-    cp -avf "/ctx/system-files/nvidia/." /
-    modules=(
-      "base.dnf"
-      "base.kernel"
-      "base.packages"
-      "base.system"
-      "base.services"
-      "de.kde.packages"
-      "integrations.homed"
-      "integrations.nix"
-      "integrations.nvidia"
-      "sign"
-      "initramfs"
-    )
-    ;;
   *)
     echo "Unknown image: $IMAGE"
     exit 1

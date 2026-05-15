@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        flavor: ["", "nvidia", "kde", "kde-nvidia"]
+        flavor: ["", "nvidia"]
 
     runs-on: ubuntu-24.04
 
