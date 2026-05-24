@@ -1,5 +1,6 @@
 ---
 name: Build disk image
+
 on:
   workflow_dispatch:
 
@@ -42,7 +43,12 @@ jobs:
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq zstd
 
       - name: Mount BTRFS for podman storage
         id: container-storage-action
@@ -63,59 +69,93 @@ jobs:
           rootfs: btrfs
           additional-args: --use-librepo=True
 
-      - name: Find ISO to upload
+      - name: Find ISO
         id: find_iso
         run: |
           ISO_FILE=$(find "${{ steps.build-iso.outputs.output-directory }}" -name "*.iso" | head -n1)
           echo "ISO_FILE=$ISO_FILE" >> $GITHUB_OUTPUT
 
-      - name: Split ISO into 1GB parts
-        id: split_iso
+      - name: Compress ISO
+        id: compress_iso
         run: |
-          mkdir -p ./iso_parts
-          split -b 1G "${{ steps.find_iso.outputs.ISO_FILE }}" ./iso_parts/install.part.
+          mkdir -p ./release
 
-      - name: Upload ISO parts to GoFile
-        id: upload_parts
+          zstd -19 -T0 \
+            "${{ steps.find_iso.outputs.ISO_FILE }}" \
+            -o ./release/install.iso.zst
+
+          echo "FILE=./release/install.iso.zst" >> $GITHUB_OUTPUT
+
+      - name: Upload to storage.to
+        id: upload_storage_to
         run: |
-          set -euo pipefail
+          set -Eeuo pipefail
 
-          MAX_RETRIES=5
+          FILE="${{ steps.compress_iso.outputs.FILE }}"
+          SIZE=$(stat -c%s "$FILE")
+          MIME="application/zstd"
 
-          for part in ./iso_parts/*; do
-            echo "Uploading $part ..."
+          VISITOR_TOKEN=$(uuidgen)
 
-            for attempt in $(seq 1 $MAX_RETRIES); do
-              echo "Attempt $attempt/$MAX_RETRIES"
+          echo "Initializing upload..."
 
-              URL=$(
-                curl -s \
-                  -F "file=@$part" \
-                  https://upload.gofile.io/uploadfile | \
-                python3 -c "import sys, json; print(json.load(sys.stdin)['data']['downloadPage'])" \
-                || true
-              )
+          INIT_RESPONSE=$(
+            curl -fsSL \
+              -X POST \
+              https://storage.to/api/upload/init \
+              -H "Content-Type: application/json" \
+              -H "X-Visitor-Token: $VISITOR_TOKEN" \
+              -d "{
+                \"filename\":\"$(basename "$FILE")\",
+                \"content_type\":\"$MIME\",
+                \"size\":$SIZE
+              }"
+          )
 
-              if [ -n "$URL" ]; then
-                echo "$URL"
-                break
-              fi
+          echo "$INIT_RESPONSE"
 
-              if [ "$attempt" -eq "$MAX_RETRIES" ]; then
-                echo "Upload failed after $MAX_RETRIES attempts for $part"
-                exit 1
-              fi
+          TYPE=$(echo "$INIT_RESPONSE" | jq -r '.type')
 
-              sleep 3
-            done
-          done
+          if [ "$TYPE" = "single" ]; then
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v5
-        with:
-          name: ${{ github.event.repository.name }}
-          path: ${{ steps.build-iso.outputs.output-directory }}
-          if-no-files-found: error
-          retention-days: 0
-          compression-level: 0
-          overwrite: true
+            UPLOAD_URL=$(echo "$INIT_RESPONSE" | jq -r '.upload_url')
+            R2_KEY=$(echo "$INIT_RESPONSE" | jq -r '.r2_key')
+
+            echo "Uploading file..."
+
+            curl \
+              --fail \
+              --retry 10 \
+              --retry-all-errors \
+              --retry-delay 5 \
+              --upload-file "$FILE" \
+              "$UPLOAD_URL"
+
+          else
+            echo "Multipart uploads are not implemented in this workflow yet."
+            exit 1
+          fi
+
+          echo "Confirming upload..."
+
+          CONFIRM_RESPONSE=$(
+            curl -fsSL \
+              -X POST \
+              https://storage.to/api/upload/confirm \
+              -H "Content-Type: application/json" \
+              -H "X-Visitor-Token: $VISITOR_TOKEN" \
+              -d "{
+                \"filename\":\"$(basename "$FILE")\",
+                \"content_type\":\"$MIME\",
+                \"size\":$SIZE,
+                \"r2_key\":\"$R2_KEY\"
+              }"
+          )
+
+          echo "$CONFIRM_RESPONSE"
+
+          URL=$(echo "$CONFIRM_RESPONSE" | jq -r '.file.url')
+
+          echo ""
+          echo "Download URL:"
+          echo "$URL"
