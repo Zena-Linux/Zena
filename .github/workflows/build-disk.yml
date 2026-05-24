@@ -2,6 +2,8 @@ name: Build disk image
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 */3 * *'
 
 env:
   IMAGE_NAME: "${{ github.event.repository.name }}"
