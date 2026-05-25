@@ -249,7 +249,7 @@ jobs:
           fi
 
           cat > "./metadata/${FLAVOR}.json" <<EOF
-          {
+          { s0/git-publish-subdir-action@develop
             "flavor": "$FLAVOR",
             "image": "${{ env.IMAGE_NAME }}",
             "download_url": "${{ steps.upload_storage_to.outputs.URL }}"
@@ -264,27 +264,29 @@ jobs:
 
   publish_release:
 
-    name: Publish GitHub release
+    name: Publish metadata
     needs: build_release
-
+  
     runs-on: ubuntu-24.04
-
+  
     permissions:
       contents: write
-
+  
     steps:
       - name: Install jq
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
-
+  
       - name: Download metadata artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v4
         with:
           path: ./downloads
-
+  
       - name: Merge metadata
         run: |
+          mkdir -p ./metadata
+  
           find ./downloads -name "*.json" -print0 \
             | xargs -0 jq -s '
                 reduce .[] as $item ({}; .[$item.flavor] = {
@@ -292,17 +294,14 @@ jobs:
                   download_url: $item.download_url
                 })
               ' \
-            > releases.json
-
-          cat releases.json
-
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: latest
-          name: Latest Build
-          make_latest: true
-          files: releases.json
-          body: |
-            Disk image download links.
-            This release only contains metadata JSON.
+            > ./metadata/releases.json
+  
+          cat ./metadata/releases.json
+  
+      - name: Publish metadata branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: metadata
+          FOLDER: metadata
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
