@@ -77,16 +77,34 @@ jobs:
 
           echo "ISO_FILE=$ISO_FILE" >> $GITHUB_OUTPUT
 
-      - name: Compress ISO
-        id: compress_iso
+      - name: Prepare ISO
+        id: prepare_iso
         run: |
           mkdir -p ./release
 
-          zstd -19 -T0 \
-            "${{ steps.find_iso.outputs.ISO_FILE }}" \
-            -o ./release/install.iso.zst
+          FLAVOR="${{ matrix.flavor }}"
 
-          echo "FILE=./release/install.iso.zst" >> $GITHUB_OUTPUT
+          if [ -z "$FLAVOR" ]; then
+            FLAVOR="default"
+          fi
+
+          ISO_NAME="${IMAGE_NAME}-${FLAVOR}.iso"
+
+          cp \
+            "${{ steps.find_iso.outputs.ISO_FILE }}" \
+            "./release/${ISO_NAME}"
+
+          echo "ISO_NAME=$ISO_NAME" >> $GITHUB_OUTPUT
+          echo "ISO_FILE=./release/${ISO_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Compress ISO
+        id: compress_iso
+        run: |
+          zstd -19 -T0 \
+            "${{ steps.prepare_iso.outputs.ISO_FILE }}" \
+            -o "${{ steps.prepare_iso.outputs.ISO_FILE }}.zst"
+
+          echo "FILE=${{ steps.prepare_iso.outputs.ISO_FILE }}.zst" >> $GITHUB_OUTPUT
 
       - name: Upload to storage.to
         id: upload_storage_to
@@ -249,9 +267,10 @@ jobs:
           fi
 
           cat > "./metadata/${FLAVOR}.json" <<EOF
-          { s0/git-publish-subdir-action@develop
+          {
             "flavor": "$FLAVOR",
             "image": "${{ env.IMAGE_NAME }}",
+            "filename": "${{ steps.prepare_iso.outputs.ISO_NAME }}.zst",
             "download_url": "${{ steps.upload_storage_to.outputs.URL }}"
           }
           EOF
