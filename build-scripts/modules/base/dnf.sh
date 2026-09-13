@@ -27,6 +27,8 @@ coprs=(
   avengemedia/dms
 
   che/nerd-fonts
+
+  dsommers/openvpn3
 )
 
 for copr in "${coprs[@]}"; do

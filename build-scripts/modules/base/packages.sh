@@ -18,6 +18,7 @@ packages=(
   NetworkManager-wifi
   NetworkManager-wwan
   openconnect
+  openvpn3-client
   spoofdpi
   vpnc
   wireguard-tools
