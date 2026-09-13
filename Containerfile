@@ -5,11 +5,20 @@ COPY build-scripts /
 COPY system-files/assets /assets
 COPY system-files/ /system-files
 
+FROM ghcr.io/ublue-os/brew:latest AS brew
+
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
 COPY system-files/common /
 COPY system-files/wm /
 
 ARG IMAGE=${IMAGE}
+
+ARG BREW_IMAGE=ghcr.io/ublue-os/brew:latest
+COPY --from=${BREW_IMAGE} /system_files/ /tmp/brew_files/
+RUN find /tmp/brew_files -type f -printf '/%P\0' > /tmp/brew_list.txt && \
+    cp -a /tmp/brew_files/. / && \
+    xargs -0 -a /tmp/brew_list.txt setfattr -h -n user.component -v "homebrew" && \
+    rm -rf /tmp/brew_files /tmp/brew_list.txt
 
 # NVIDIA flavor only: overlay nvidia system-files (COPY can't be conditional)
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
@@ -44,6 +53,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/var --mount=type=tmpfs,dst=/tmp \
     /ctx/modules/wm/services.sh
+
 
 # --- integrations ---
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
