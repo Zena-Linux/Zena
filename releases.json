@@ -1,10 +1,10 @@
 {
   "nvidia": {
     "image": "zena-nvidia",
-    "download_url": "https://storage.to/rw0fUSmVR"
+    "download_url": "https://storage.to/AXqH3RPmw"
   },
   "default": {
     "image": "zena",
-    "download_url": "https://storage.to/GeZWpkzGE"
+    "download_url": "https://storage.to/UXMX7MisT"
   }
 }
